@@ -28,7 +28,7 @@ class TerminalScribe:
         self.canvas = canvas
         self.trail = '.'
         self.mark = '*'
-        self.framerate = 0.05
+        self.framerate = 0.1
         self.pos = [0, 0]
         self.direction = [0, 0]
         self.instructions = []
@@ -36,26 +36,29 @@ class TerminalScribe:
         self.done = False
 
     def setDirection(self, deg):
-    	radians = (deg/180) * math.pi
-    	self.direction = [math.sin(radians), -math.cos(radians)] #negative cosine because up is negative
-    	
+        radians = (deg/180) * math.pi
+        self.direction = [math.sin(radians), -math.cos(radians)] #negative cosine because up is negative
+        
     def setPosition(self, pos):
-    	self.pos = pos
-    	
+        self.pos = pos
+        
     def next(self):
-    	if self.instrTracker['iter'] > self.instructions[self.instrTracker['action']]['count']:
-    		if ++self.instrTracker['action'] > len(self.instructions):
-    			self.done = True
-    			return
-    	self.setDirection(self.instructions[self.instrTracker['action']]['dir'])
-    	self.forward()
-    	self.instrTracker['iter']++
-    	
+        if self.done:
+            return
+        if self.instrTracker['iter'] > self.instructions[self.instrTracker['action']]['count']:
+            self.instrTracker['action'] += 1
+            if self.instrTracker['action'] >= len(self.instructions):
+                self.done = True
+                return
+        self.setDirection(self.instructions[self.instrTracker['action']]['dir'])
+        self.forward()
+        self.instrTracker['iter'] += 1
+        
     def forward(self):
-    	pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
-    	if not self.canvas.hitsWall(pos):
-    		self.draw(pos)
-    	
+        pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
+        if not self.canvas.hitsWall(pos):
+            self.draw(pos)
+        
     def up(self):
         self.direction = [0, -1]
         self.forward()
@@ -101,34 +104,39 @@ class TerminalScribe:
 
 canvas = Canvas(30, 30)
 scribes = [{
-					'pos' : [0, 0],
-					'instr' : [
-									{'dir':135,'count':5},
-									{'dir':180,'count':2},
-				                 ],
-					},
-				   {
-				    'pos' : [15, 15],
-					'instr' : [
-									{'dir':90,'count':3},
-									{'dir':0,'count':1},
-				    		     ],
-				   }]
+                'pos':  [0, 0],
+                'instr':[   
+                            {'dir':135,'count':5},
+                            {'dir':180,'count':20},
+                        ],
+            },
+            {
+                'pos':  [15, 15],
+                'instr': [
+                            {'dir':90,'count':3},
+                            {'dir':0,'count':5},
+                            {'dir':270,'count':10},
+                        ],
+            }]
 
 def runScribes(scribes):
-	for s in scribes:
-		s['scribe'] = TerminalScribe(canvas)
-		s['scribe'].setPosition(s['pos'])
-		s['scribe'].instructions.append(s['instr'])
-	scribes[0]['scribe'].next()
-		
+    for s in scribes:
+        s['scribe'] = TerminalScribe(canvas)
+        s['scribe'].setPosition(s['pos'])
+        for instr in s['instr']:
+            s['scribe'].instructions.append(instr)
+    maxInstructionLength = max([sum([instr['count'] for instr in scribInstr['instr']]) for scribInstr in scribes])
+    for i in range(maxInstructionLength):
+        for s in scribes:
+            s['scribe'].next()
+        
 runScribes(scribes)
 
 """scribe = TerminalScribe(canvas)
 scribe.drawSquare(20)
 scribe.setDirection(135)
 for i in range(30):
-	scribe.forward()	
+    scribe.forward()    
 scribe.setDirection(50)
 for i in range(15):
-	scribe.forward()"""
+    scribe.forward()"""
