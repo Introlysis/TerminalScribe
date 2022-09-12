@@ -78,7 +78,7 @@ class TerminalScribe:
     
     def plot(self, func):
         for x in range(self.canvas._x):
-            pos = [x, func(x)+15]
+            pos = [x, func(x)+(self.canvas._y // 2)]
             self.draw(pos)
         
 """    def up(self):
