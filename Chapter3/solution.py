@@ -33,14 +33,14 @@ class TerminalScribe:
         self.direction = [0, 0]
 
     def setDirection(self, deg):
-    	radians = (deg/180) * math.pi
-    	self.direction = [math.sin(radians), -math.cos(radians)] #negative cosine because up is negative
-    	
+        radians = (deg/180) * math.pi
+        self.direction = [math.sin(radians), -math.cos(radians)] #negative cosine because up is negative
+        
     def forward(self):
-    	pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
-    	if not self.canvas.hitsWall(pos):
-    		self.draw(pos)
-    	
+        pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
+        if not self.canvas.hitsWall(pos):
+            self.draw(pos)
+        
     def up(self):
         self.direction = [0, -1]
         self.forward()
@@ -90,9 +90,9 @@ scribe = TerminalScribe(canvas)
 #scribe.drawSquare(20)
 scribe.setDirection(135)
 for i in range(15):
-	scribe.forward()
-	
+    scribe.forward()
+    
 """scribe.setDirection(50)
 for i in range(15):
-	scribe.forward()"""
+    scribe.forward()"""
 
