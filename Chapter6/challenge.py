@@ -79,24 +79,21 @@ class TerminalScribe:
     def plot(self, func):
         for x in range(self.canvas._x):
             pos = [x, func(x)+(self.canvas._y // 2)]
-            self.draw(pos)
-        
+            if not self.canvas.hitsWall(pos):
+                self.draw(pos)
+
 """    def up(self):
         self.direction = [0, -1]
         self.forward()
-
     def down(self):
         self.direction = [0, 1]
         self.forward()
-
     def right(self):
         self.direction = [1, 0]
         self.forward()
-
     def left(self):
         self.direction = [-1, 0]
         self.forward()
-
     def drawSquare(self, size):
         i = 0
         while i < size:
@@ -171,4 +168,4 @@ for i in range(30):
     scribe.forward()    
 scribe.setDirection(50)
 for i in range(15):
-    scribe.forward()"""
+    scribe.forward()"""         
