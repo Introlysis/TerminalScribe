@@ -124,7 +124,7 @@ class TerminalScribe:
             self.up()
             i = i + 1"""
 
-canvas = CanvasAxes(25, 30)
+canvas = Canvas(30, 30)
 scribes = [{
                 'pos':  [0, 0],
                 'instr':[   
@@ -166,12 +166,12 @@ def runScribes(scribes):
 #runScribes(scribes)
 
 def plotFunc(x_val):
-    return math.sin(x_val)
+    return 5 * math.sin(x_val / 4)
 
 scribe = TerminalScribe(canvas)
 scribe2 = TerminalScribe(canvas)
 scribe.plot(plotFunc)
-scribe2.plot(lambda x: math.cos(x))
+scribe2.plot(lambda x: 5 * math.cos(x / 4))
 
 
 """scribe = TerminalScribe(canvas)
@@ -181,4 +181,4 @@ for i in range(30):
     scribe.forward()    
 scribe.setDirection(50)
 for i in range(15):
-    scribe.forward()"""       
+    scribe.forward()"""        
