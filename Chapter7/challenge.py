@@ -41,6 +41,22 @@ class CanvasAxes(Canvas):
             print(self.setAxes()[1][y] + ' ' + ' '.join([col[y] for col in self._canvas]))
         print(' '.join(self.setAxes()[0]))
 
+class MultiScribeCanvas(Canvas):
+    def initScribes(self,scribes):
+        self.scribes = scribes
+        for s in self.scribes:
+            s['scribe'] = TerminalScribe(self)
+            s['scribe'].setPosition(s['pos'])
+            s['scribe'].setDirection(s['instr'][0]['dir'])
+            for instr in s['instr']:
+                s['scribe'].instructions.append(instr)
+
+    def runScribes(self):
+        maxInstructionLength = max([sum([instr['count'] for instr in scribInstr['instr']]) for scribInstr in self.scribes])
+        for i in range(maxInstructionLength):
+            for s in self.scribes:
+                s['scribe'].next()
+
 class TerminalScribe:
     def __init__(self, canvas):
         self.canvas = canvas
@@ -50,7 +66,6 @@ class TerminalScribe:
         self.pos = [0, 0]
         self.direction = [0, 0]
         self.instructions = []
-        #self.instrTracker = {'action' : 0, 'iter' : 1}
         self.instrTracker = 0
         self.done = False
 
@@ -87,44 +102,44 @@ class TerminalScribe:
         self.canvas.setPos(self.pos, colored(self.mark, 'red'))
         self.canvas.print()
         time.sleep(self.framerate)
-    
+
+class SquareScribe(TerminalScribe):
+    def forward(self,distance):
+        for i in range(distance):
+            pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
+            if not self.canvas.hitsWall(pos):
+                self.draw(pos)
+
+    def up(self,distance=1):
+        self.direction = [0, -1]
+        self.forward(distance)
+
+    def down(self,distance=1):
+        self.direction = [0, 1]
+        self.forward(distance)
+
+    def right(self,distance=1):
+        self.direction = [1, 0]
+        self.forward(distance)
+
+    def left(self,distance=1):
+        self.direction = [-1, 0]
+        self.forward(distance)
+
+    def drawSquare(self, size):
+        self.right(size)
+        self.down(size)
+        self.left(size)
+        self.up(size)
+
+class PlotterScribe(TerminalScribe):
     def plot(self, func):
         for x in range(self.canvas._x):
             pos = [x, func(x)+(self.canvas._y // 2)]
             if not self.canvas.hitsWall(pos):
                 self.draw(pos)
 
-"""    def up(self):
-        self.direction = [0, -1]
-        self.forward()
-    def down(self):
-        self.direction = [0, 1]
-        self.forward()
-    def right(self):
-        self.direction = [1, 0]
-        self.forward()
-    def left(self):
-        self.direction = [-1, 0]
-        self.forward()
-    def drawSquare(self, size):
-        i = 0
-        while i < size:
-            self.right()
-            i = i + 1
-        i = 0
-        while i < size:
-            self.down()
-            i = i + 1
-        i = 0
-        while i < size:
-            self.left()
-            i = i + 1
-        i = 0
-        while i < size:
-            self.up()
-            i = i + 1"""
 
-canvas = Canvas(30, 30)
 scribes = [{
                 'pos':  [0, 0],
                 'instr':[   
@@ -150,35 +165,28 @@ scribes = [{
                         ],
             },
             ]
+canvas = MultiScribeCanvas(30, 30)
+canvas.initScribes(scribes)
+canvas.runScribes()
+input()
 
-def runScribes(scribes):
-    for s in scribes:
-        s['scribe'] = TerminalScribe(canvas)
-        s['scribe'].setPosition(s['pos'])
-        s['scribe'].setDirection(s['instr'][0]['dir'])
-        for instr in s['instr']:
-            s['scribe'].instructions.append(instr)
-    maxInstructionLength = max([sum([instr['count'] for instr in scribInstr['instr']]) for scribInstr in scribes])
-    for i in range(maxInstructionLength):
-        for s in scribes:
-            s['scribe'].next()
-        
-#runScribes(scribes)
 
-def plotFunc(x_val):
+def sine(x_val):
     return 5 * math.sin(x_val / 4)
 
-scribe = TerminalScribe(canvas)
-scribe2 = TerminalScribe(canvas)
-scribe.plot(plotFunc)
-scribe2.plot(lambda x: 5 * math.cos(x / 4))
+def cosine(x_val):
+    return 5 * math.cos(x_val / 4)
+
+canvasAxes = CanvasAxes(30,30)
+scribe = PlotterScribe(canvasAxes)
+scribe.plot(sine)
+scribe.plot(cosine)
+input()
 
 
-"""scribe = TerminalScribe(canvas)
+scribe = SquareScribe(canvas)
 scribe.drawSquare(20)
-scribe.setDirection(135)
-for i in range(30):
-    scribe.forward()    
-scribe.setDirection(50)
-for i in range(15):
-    scribe.forward()"""        
+scribe.right(25)
+scribe.down(5)
+scribe.left(30)
+input("Program complete!")
