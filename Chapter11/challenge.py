@@ -8,9 +8,10 @@ parse.add_argument('--file', '-f',required=True,help='.json file from which to r
 args = parse.parse_args()
 
 try:
-    results = json.loads(args.file)
-except Exception:
-    raise InputException(f'Could not parse JSON from {args.file}')
+    with open(args.file, 'r') as f:
+        results = json.loads(f.readline())
+except Exception as e:
+    raise InputException(f'Could not parse JSON from {args.file}\n{e}')
 
 if not 'name' in results:
     raise InputException('No \'name\' found in file')
@@ -49,7 +50,9 @@ scribes = [{
                         ],
             },
             ]
-
+"""
+"""
+scribes = [{"pos": [10, 5],"instr": [{"dir": 270, "count": 5},{"dir": 90, "count": 10}],"scribe": "MultiTerminalScribe"},{"pos": [10, 5],"instr": [{"dir": 180, "count": 10},{"dir": 225, "count": 2},{"dir": 270, "count": 2},{"dir": 315, "count": 2}],"scribe": "MultiTerminalScribe"},{"pos": [15, 11],"instr": [{"dir": 90, "count": 1},{"dir": 135, "count": 2},{"dir": 180, "count": 2},{"dir": 225, "count": 2},{"dir": 270, "count": 2},{"dir": 315, "count": 2},{"dir": 0, "count": 2},{"dir": 45, "count": 2},{"dir": 90, "count": 1}],"scribe": "MultiTerminalScribe"},{"pos": [20, 14],"instr": [{"dir": 90, "count": 4},{"dir": 45, "count": 2},{"dir": 315, "count": 2},{"dir": 270, "count": 4},{"dir": 225, "count": 2},{"dir": 180, "count": 2},{"dir": 135, "count": 2},{"dir": 90, "count": 4}],"scribe": "MultiTerminalScribe"}]
 canvas = MultiScribeCanvas(30, 30)
 canvas.initScribes(scribes)
 canvas.pushToFile('test_file')

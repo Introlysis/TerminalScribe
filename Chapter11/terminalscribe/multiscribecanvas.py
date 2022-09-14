@@ -35,6 +35,7 @@ class MultiScribeCanvas(Canvas):
 
     def runScribes(self):
         maxInstructionLength = max([sum([instr['count'] for instr in scribInstr['instr']]) for scribInstr in self.scribes])
+        print(maxInstructionLength)
         for i in range(maxInstructionLength):
             self.threads = []
             for s in self.scribes:
