@@ -1,1 +1,54 @@
-{"name": "MultiScribeCanvas", "width": 30, "height": 30, "scribes": [{"pos": [10, 5],"instr": [{"dir": 270, "count": 5},{"dir": 90, "count": 10}],"scribe": "MultiTerminalScribe"},{"pos": [10, 5],"instr": [{"dir": 180, "count": 10},{"dir": 225, "count": 2},{"dir": 270, "count": 2},{"dir": 315, "count": 2}],"scribe": "MultiTerminalScribe"},{"pos": [15, 11],"instr": [{"dir": 90, "count": 1},{"dir": 135, "count": 2},{"dir": 180, "count": 2},{"dir": 225, "count": 2},{"dir": 270, "count": 2},{"dir": 315, "count": 2},{"dir": 0, "count": 2},{"dir": 45, "count": 2},{"dir": 90, "count": 1}],"scribe": "MultiTerminalScribe"},{"pos": [20, 14],"instr": [{"dir": 90, "count": 4},{"dir": 45, "count": 2},{"dir": 315, "count": 2},{"dir": 270, "count": 4},{"dir": 225, "count": 2},{"dir": 180, "count": 2},{"dir": 135, "count": 2},{"dir": 90, "count": 11}],"scribe": "MultiTerminalScribe"}],"framerate": 0.01}
+{
+    "name": "MultiScribeCanvas",
+    "width": 30, 
+    "height": 30, 
+    "scribes": [
+        {
+            "pos": [10, 5],
+            "instr": [
+                {"dir": 270, "count": 5},
+                {"dir": 90, "count": 10}],
+            "scribe": "MultiTerminalScribe"
+        },
+        {
+            "pos": [10, 5],
+            "instr": [
+                {"dir": 180, "count": 10},
+                {"dir": 225, "count": 2},
+                {"dir": 270, "count": 2},
+                {"dir": 315, "count": 2}
+            ],
+            "scribe": "MultiTerminalScribe"
+        },
+        {
+            "pos": [15, 11],
+            "instr": [
+                {"dir": 90, "count": 1},
+                {"dir": 135, "count": 2},
+                {"dir": 180, "count": 2},
+                {"dir": 225, "count": 2},
+                {"dir": 270, "count": 2},
+                {"dir": 315, "count": 2},
+                {"dir": 0, "count": 2},
+                {"dir": 45, "count": 2},
+                {"dir": 90, "count": 1}
+            ],
+            "scribe": "MultiTerminalScribe"
+        },
+        {
+            "pos": [20, 14],
+            "instr": [
+                {"dir": 90, "count": 4},
+                {"dir": 45, "count": 2},
+                {"dir": 315, "count": 2},
+                {"dir": 270, "count": 4},
+                {"dir": 225, "count": 2},
+                {"dir": 180, "count": 2},
+                {"dir": 135, "count": 2},
+                {"dir": 90, "count": 11}
+            ],
+            "scribe": "MultiTerminalScribe"
+        }
+    ],
+    "framerate": 0.01
+}
