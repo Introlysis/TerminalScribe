@@ -1,0 +1,9 @@
+{
+    "name":"SquareScribe",
+    "canvas":[30,30],
+    "instr":[
+        {"function":"drawSquare","count":10},
+        {"function":"right","count":20},
+        {"function":"down","count":20}
+    ]
+}
