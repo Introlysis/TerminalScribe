@@ -2,22 +2,48 @@ import json
 from argparse import ArgumentParser
 from terminalscribe.util import InputException
 from terminalscribe.multiscribecanvas import MultiScribeCanvas
+from terminalscribe.canvas import Canvas
+from terminalscribe.squarescribe import SquareScribe
 
 parse = ArgumentParser()
-parse.add_argument('--file', '-f',required=True,help='.json file from which to read TerminalScribe data')
+parse.add_argument('--file', '-f',help='.json file from which to read TerminalScribe data')
+parse.add_argument('--raw', '-r',help='dictionary to instantiate TerminalScribe instances')
 args = parse.parse_args()
 
-try:
-    with open(args.file, 'r') as f:
-        results = json.loads(f.readline())
-except Exception as e:
-    raise InputException(f'Could not parse JSON from {args.file}\n{e}')
+if args.file is not None and args.raw is not None:
+    raise InputException('Please supply one or the other: --file or --raw. Can not parse both')
+
+if args.file is not None:
+    try:
+        with open(args.file, 'r') as f:
+            results = json.loads(''.join(f.readlines()))
+    except Exception as e:
+        raise InputException(f'Could not parse JSON from {args.file}\n{e}')
+if args.raw is not None:
+    try:
+        results = json.loads(str(args.raw))
+    except Exception as e:
+        raise InputException(f'Could not parse JSON input.\n{e}')
 
 if not 'name' in results:
-    raise InputException('No \'name\' found in file')
+    raise InputException('No \'name\' found in input')
 if results['name'] == 'MultiScribeCanvas':
     canvas = MultiScribeCanvas.fromDict(results)
     canvas.runScribes()
+elif results['name'] == 'SquareScribe':
+    canvas = Canvas(results['canvas'][0],results['canvas'][1])
+    scribe = SquareScribe(canvas)
+    for instructions in results['instr']:
+        if instructions['function'] == 'drawSquare':
+            scribe.drawSquare(instructions['count'])
+        if instructions['function'] == 'up':
+            scribe.up(instructions['count'])
+        if instructions['function'] == 'down':
+            scribe.down(instructions['count'])
+        if instructions['function'] == 'left':
+            scribe.left(instructions['count'])
+        if instructions['function'] == 'right':
+            scribe.right(instructions['count'])
 else:
     raise InputException('Could not determine what object to create')
 
